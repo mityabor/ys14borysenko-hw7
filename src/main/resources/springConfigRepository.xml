@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.1.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+    <context:component-scan base-package="ua.yandex.pizza.repository"/>
+
+    <bean name="pizzaRepository" class="ua.yandex.pizza.repository.TestPizzaRepositoryImpl">
+        <property name="pizzas">
+            <list>
+                <bean class="ua.yandex.pizza.domain.Pizza">
+                    <property name="id" value="1"/>
+                    <property name="name" value="UglyOhotnichya"/>
+                    <property name="price" value="1"/>
+                    <property name="type" value="Ohotnichya"/>
+                </bean>
+                <bean class="ua.yandex.pizza.domain.Pizza">
+                    <property name="id" value="2"/>
+                    <property name="name" value="SplendidPizza"/>
+                    <property name="price" value="100"/>
+                    <property name="type" value="Ohotnichya"/>
+                </bean>
+                <bean class="ua.yandex.pizza.domain.Pizza">
+                    <property name="id" value="3"/>
+                    <property name="name" value="HotMozarella"/>
+                    <property name="price" value="12"/>
+                    <property name="type" value="Mozarella"/>
+                </bean>
+                <bean class="ua.yandex.pizza.domain.Pizza">
+                    <property name="id" value="4"/>
+                    <property name="name" value="ColdMozarella"/>
+                    <property name="price" value="7"/>
+                    <property name="type" value="Mozarella"/>
+                </bean>
+            </list>
+        </property>
+    </bean>
+
+</beans>
