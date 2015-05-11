@@ -64,4 +64,18 @@ public class PizzaRestController {
 
         return new ResponseEntity<>(pizza, status);
     }
+    
+    // GET http://localhost:8080/PizzaDelivery/pages/pizza/1/price
+    @RequestMapping(method = RequestMethod.GET, value = "pizza/{id}/price")
+    public double getPizzaPrice(@PathVariable("id") int id) {
+        if (id < 0) {
+            return -1;
+        }
+
+        Pizza pizza = pizzaService.getPizzaById(id);
+        if (pizza == null) {
+            return 0;
+        }
+        return pizza.getPrice();
+    }
 }
