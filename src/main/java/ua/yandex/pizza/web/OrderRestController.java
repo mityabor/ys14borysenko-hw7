@@ -46,7 +46,7 @@ public class OrderRestController {
     public ResponseEntity<Order> addPizzasToOrder(@RequestBody OrderDTO orderDTO) {
         Customer customer = orderDTO.getCustomer();
         List<Integer> pizzasID = orderDTO.getPizzasID();
-        
+
         if ((pizzasID == null) || pizzasID.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
@@ -54,39 +54,51 @@ public class OrderRestController {
         orderService.placeOrder(order);
         return new ResponseEntity<>(order, HttpStatus.OK);
     }
-    
+
     @RequestMapping(method = RequestMethod.GET, value = "item")
-    public List<Pizza>  getItemsInOrder(@PathVariable("id") int id) {
-        
+    public List<Pizza> getItemsInOrder(@PathVariable("id") int id) {
+
         if (id < 0) {
             return null;
         }
-        
+
         Order order = orderService.getAllOrders().get(id);
-        
+
         return order.getPizzas();
     }
-    
+
     @RequestMapping(method = RequestMethod.DELETE, value = "order/{orderid}/item/{pizzaid}")
-    public ResponseEntity<Pizza> deleteItemFromOrder(@PathVariable("orderid")int orderid, @PathVariable("pizzaid")int pizzaid)
-    {
+    public ResponseEntity<Pizza> deleteItemFromOrder(@PathVariable("orderid") int orderid, @PathVariable("pizzaid") int pizzaid) {
         if (orderid < 0 || pizzaid < 0) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-        
+
         Order order = orderService.getAllOrders().get(orderid);
-        
+
         if (order == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        
+
         Pizza pizza = order.getPizzas().get(pizzaid);
-       
-        if(pizza == null) {
+
+        if (pizza == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        
-        return new ResponseEntity<>(pizza,HttpStatus.OK);
+
+        return new ResponseEntity<>(pizza, HttpStatus.OK);
     }
-    
+
+    // POST http://localhost:8080/PizzaDelivery/pages/order {"customer":{"name":"Andrii","phone":"1234567"},"pizzasID":[1,3,2]}
+    @RequestMapping(
+            method = RequestMethod.POST,
+            value = "order",
+            headers = "Content-Type=application/json")
+    public ResponseEntity<Order> addOrder(@RequestBody OrderDTO orderDto) {
+        System.out.println(orderDto);
+        
+        Order order = orderService.createNewOrder(orderDto.getCustomer(), 
+                orderDto.getPizzasID());
+        return new ResponseEntity<>(order, HttpStatus.OK);
+    }
+
 }
