@@ -2,6 +2,7 @@ package ua.yandex.pizza.web;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -78,4 +79,23 @@ public class PizzaRestController {
         }
         return pizza.getPrice();
     }
+    
+    // PUT http://localhost:8080/PizzaDelivery/pages/pizza/1/price
+    @RequestMapping(method = RequestMethod.PUT, value = "pizza/{id}/price")
+    public ResponseEntity<Pizza> updatePizzaPrice(@PathVariable("id") int id, @RequestParam("price") double price) {
+        if (id < 0) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+        Pizza pizza = pizzaService.getPizzaById(id);
+        if (pizza == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        
+        pizza.setPrice(price);
+        System.out.println(price);
+        
+        return new ResponseEntity<>(pizza, HttpStatus.OK);
+    }
+
 }
