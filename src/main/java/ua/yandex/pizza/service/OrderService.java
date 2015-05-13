@@ -11,6 +11,7 @@ public interface OrderService {
     Order createNewOrder();
     
     Order createNewOrder(Customer customer, List<Integer> pizzasID);
+    void addItemToOrder(int orderID, int pizzaID);
 
     void placeOrder(Order newOrder);
 }

@@ -1,5 +1,7 @@
 package ua.yandex.pizza.web;
 
+import java.time.Instant;
+import java.util.Date;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -13,12 +15,14 @@ import ua.yandex.pizza.domain.Customer;
 import ua.yandex.pizza.domain.Order;
 import ua.yandex.pizza.domain.Pizza;
 import ua.yandex.pizza.service.OrderService;
+import ua.yandex.pizza.service.PizzaService;
 
 @RestController
 public class OrderRestController {
 
     @Autowired
     private OrderService orderService;
+    
 
     @RequestMapping(method = RequestMethod.GET)
     public ResponseEntity<List<Order>> getAllOrders() {
@@ -39,21 +43,21 @@ public class OrderRestController {
         return new ResponseEntity<>(order, HttpStatus.OK);
     }
 
-    @RequestMapping(
-            method = RequestMethod.POST,
-            value = "order",
-            headers = "Content-Type=application/json")
-    public ResponseEntity<Order> addPizzasToOrder(@RequestBody OrderDTO orderDTO) {
-        Customer customer = orderDTO.getCustomer();
-        List<Integer> pizzasID = orderDTO.getPizzasID();
-
-        if ((pizzasID == null) || pizzasID.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
-        Order order = orderService.createNewOrder(customer, pizzasID);
-        orderService.placeOrder(order);
-        return new ResponseEntity<>(order, HttpStatus.OK);
-    }
+//    @RequestMapping(
+//            method = RequestMethod.POST,
+//            value = "order",
+//            headers = "Content-Type=application/json")
+//    public ResponseEntity<Order> addPizzasToOrder(@RequestBody OrderDTO orderDTO) {
+//        Customer customer = orderDTO.getCustomer();
+//        List<Integer> pizzasID = orderDTO.getPizzasID();
+//
+//        if ((pizzasID == null) || pizzasID.isEmpty()) {
+//            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+//        }
+//        Order order = orderService.createNewOrder(customer, pizzasID);
+//        orderService.placeOrder(order);
+//        return new ResponseEntity<>(order, HttpStatus.OK);
+//    }
 
     @RequestMapping(method = RequestMethod.GET, value = "item")
     public List<Pizza> getItemsInOrder(@PathVariable("id") int id) {
@@ -98,7 +102,48 @@ public class OrderRestController {
         
         Order order = orderService.createNewOrder(orderDto.getCustomer(), 
                 orderDto.getPizzasID());
+        order.setDate(new Date());
+        order.setId(orderService.getAllOrders().size());
+        order.setName(orderDto.getCustomer()+ orderDto.getPizzasID().toString());
+        System.out.println(order);
+        orderService.placeOrder(order);
+        
         return new ResponseEntity<>(order, HttpStatus.OK);
+    }
+    
+    @RequestMapping(method = RequestMethod.PUT, value = "order/{orderid}/item/{pizzaid}")
+    public ResponseEntity<Order> addItemToOrder(@PathVariable("orderid") int orderid, @PathVariable("pizzaid") int pizzaid) {
+        if (orderid < 0 || pizzaid < 0) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+        orderService.addItemToOrder(orderid, pizzaid);
+
+        Order order = orderService.getAllOrders().get(orderid);
+        
+
+        return new ResponseEntity<>(order, HttpStatus.OK);
+    }
+    
+    @RequestMapping(method = RequestMethod.PUT, value = "order/{orderid}/customer")
+    public ResponseEntity<Pizza> updateCustomerInOrder(@PathVariable("orderid") int orderid, @PathVariable("pizzaid") int pizzaid) {
+        if (orderid < 0 || pizzaid < 0) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+        Order order = orderService.getAllOrders().get(orderid);
+
+        if (order == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        Pizza pizza = order.getPizzas().get(pizzaid);
+
+        if (pizza == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        return new ResponseEntity<>(pizza, HttpStatus.OK);
     }
 
 }

@@ -42,9 +42,17 @@ public abstract class SimpleOrderService implements OrderService {
         return order;
     }
 
+    
     @Override
     public void placeOrder(Order newOrder) {
         orderRepository.saveOrder(newOrder);
+    }
+    
+    @Override
+    public void addItemToOrder(int orderId, int pizzaId) {
+        Order order = orderRepository.getOrder(orderId);
+        Pizza pizza = pizzaRepository.getPizza(pizzaId);
+        order.getPizzas().add(pizza);
     }
 
 }
