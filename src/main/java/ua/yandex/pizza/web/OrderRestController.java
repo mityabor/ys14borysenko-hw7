@@ -83,8 +83,9 @@ public class OrderRestController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
+        
         Pizza pizza = order.getPizzas().get(pizzaid);
-
+        order.getPizzas().remove(pizzaid);
         if (pizza == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
@@ -126,8 +127,9 @@ public class OrderRestController {
     }
     
     @RequestMapping(method = RequestMethod.PUT, value = "order/{orderid}/customer")
-    public ResponseEntity<Pizza> updateCustomerInOrder(@PathVariable("orderid") int orderid, @PathVariable("pizzaid") int pizzaid) {
-        if (orderid < 0 || pizzaid < 0) {
+    public ResponseEntity<Order> updateCustomerInOrder(@PathVariable("orderid") int orderid,
+            @RequestBody Customer customer) {
+        if (orderid < 0) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
@@ -137,13 +139,11 @@ public class OrderRestController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
-        Pizza pizza = order.getPizzas().get(pizzaid);
+        order.setCustomer(customer);
 
-        if (pizza == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+   
 
-        return new ResponseEntity<>(pizza, HttpStatus.OK);
+        return new ResponseEntity<>(order, HttpStatus.OK);
     }
 
 }
