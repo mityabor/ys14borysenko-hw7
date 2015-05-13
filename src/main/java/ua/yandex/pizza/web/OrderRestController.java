@@ -85,7 +85,7 @@ public class OrderRestController {
 
         
         Pizza pizza = order.getPizzas().get(pizzaid);
-        order.getPizzas().remove(pizzaid);
+        orderService.removeItemFromOrder(orderid, pizzaid);
         if (pizza == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
@@ -134,6 +134,7 @@ public class OrderRestController {
         }
 
         Order order = orderService.getAllOrders().get(orderid);
+        
 
         if (order == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);

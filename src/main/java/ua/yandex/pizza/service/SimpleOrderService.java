@@ -33,12 +33,15 @@ public abstract class SimpleOrderService implements OrderService {
     @Override
     public Order createNewOrder(Customer customer, List<Integer> pizzasID) {
         List<Pizza> pizzas = new ArrayList<>();
+        double price = 0;
         for(Integer id : pizzasID){
-            pizzas.add(pizzaRepository.getPizza(id));            
+            pizzas.add(pizzaRepository.getPizza(id));
+            price += pizzaRepository.getPizza(id).getPrice();
         }
         Order order = createNewOrder();
         order.setPizzas(pizzas);
         order.setCustomer(customer);
+        order.setPrice(price);
         return order;
     }
 
@@ -53,6 +56,16 @@ public abstract class SimpleOrderService implements OrderService {
         Order order = orderRepository.getOrder(orderId);
         Pizza pizza = pizzaRepository.getPizza(pizzaId);
         order.getPizzas().add(pizza);
+        order.setPrice(order.getPrice()+pizza.getPrice());
+    }
+    
+    @Override
+    public void removeItemFromOrder(int orderId, int pizzaId) {
+        Order order = orderRepository.getOrder(orderId);
+        Pizza pizza = pizzaRepository.getPizza(pizzaId);
+        order.getPizzas().remove(pizza);
+        order.setPrice(order.getPrice()-pizza.getPrice());
+    
     }
 
 }

@@ -14,4 +14,6 @@ public interface OrderService {
     void addItemToOrder(int orderID, int pizzaID);
 
     void placeOrder(Order newOrder);
+    
+    public void removeItemFromOrder(int orderId, int pizzId);
 }
