@@ -1,6 +1,5 @@
 package ua.yandex.pizza.web;
 
-import java.time.Instant;
 import java.util.Date;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +14,6 @@ import ua.yandex.pizza.domain.Customer;
 import ua.yandex.pizza.domain.Order;
 import ua.yandex.pizza.domain.Pizza;
 import ua.yandex.pizza.service.OrderService;
-import ua.yandex.pizza.service.PizzaService;
 
 @RestController
 public class OrderRestController {
@@ -42,22 +40,6 @@ public class OrderRestController {
         }
         return new ResponseEntity<>(order, HttpStatus.OK);
     }
-
-//    @RequestMapping(
-//            method = RequestMethod.POST,
-//            value = "order",
-//            headers = "Content-Type=application/json")
-//    public ResponseEntity<Order> addPizzasToOrder(@RequestBody OrderDTO orderDTO) {
-//        Customer customer = orderDTO.getCustomer();
-//        List<Integer> pizzasID = orderDTO.getPizzasID();
-//
-//        if ((pizzasID == null) || pizzasID.isEmpty()) {
-//            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-//        }
-//        Order order = orderService.createNewOrder(customer, pizzasID);
-//        orderService.placeOrder(order);
-//        return new ResponseEntity<>(order, HttpStatus.OK);
-//    }
 
     @RequestMapping(method = RequestMethod.GET, value = "item")
     public List<Pizza> getItemsInOrder(@PathVariable("id") int id) {
@@ -86,7 +68,7 @@ public class OrderRestController {
         
         Pizza pizza = order.getPizzas().get(pizzaid);
         orderService.removeItemFromOrder(orderid, pizzaid);
-        if (pizza == null) {
+        if (pizza == null || !order.getPizzas().contains(pizza)) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
