@@ -9,6 +9,7 @@ public interface OrderService {
     List<Order> getAllOrders();
 
     Order getOrder(int orderID);
+    int getNumberOfOrders();
     Order createNewOrder();
     
     Order createNewOrder(Customer customer, List<Integer> pizzasID);

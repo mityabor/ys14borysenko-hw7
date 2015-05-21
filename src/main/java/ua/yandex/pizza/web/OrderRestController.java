@@ -42,15 +42,15 @@ public class OrderRestController {
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "order/{orderid}/item/")
-    public List<Pizza> getItemsInOrder(@PathVariable("id") int id) {
+    public ResponseEntity<List<Pizza>> getItemsInOrder(@PathVariable("id") int id) {
 
         if (id < 0) {
-            return null;
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
         Order order = orderService.getOrder(id);
 
-        return order.getPizzas();
+        return new ResponseEntity<>(order.getPizzas(), HttpStatus.OK);
     }
 
     @RequestMapping(method = RequestMethod.DELETE, value = "order/{orderid}/item/{pizzaid}")

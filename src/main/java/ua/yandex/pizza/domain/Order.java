@@ -16,7 +16,6 @@ public class Order {
     private String name;
     private Customer customer;
     private List<Pizza> pizzas = new ArrayList<>();
-    private Double price;
     private static int numberOfOrders = 0;
 
     public Order() {
@@ -45,10 +44,6 @@ public class Order {
         this.pizzas = pizzas;
     }
 
-    public void setPrice(Double price) {
-        this.price = price;
-    }
-
     public void addItems(Pizza... pizza) {
         Collections.addAll(pizzas, pizza);
     }
@@ -69,9 +64,15 @@ public class Order {
         return pizzas;
     }
 
+    
     public Double getPrice() {
-        return price;
+        double sum = 0;
+        for (Pizza pizza: pizzas) {
+            sum += pizza.getPrice();
+        }
+        return sum;
     }
+
 
     public Customer getCustomer() {
         return customer;
