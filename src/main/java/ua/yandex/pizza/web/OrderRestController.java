@@ -41,7 +41,7 @@ public class OrderRestController {
         return new ResponseEntity<>(order, HttpStatus.OK);
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "item")
+    @RequestMapping(method = RequestMethod.GET, value = "order/{orderid}/item/")
     public List<Pizza> getItemsInOrder(@PathVariable("id") int id) {
 
         if (id < 0) {
@@ -91,7 +91,7 @@ public class OrderRestController {
         System.out.println(order);
         orderService.placeOrder(order);
         
-        return new ResponseEntity<>(order, HttpStatus.OK);
+        return new ResponseEntity<>(order, HttpStatus.CREATED);
     }
     
     @RequestMapping(method = RequestMethod.PUT, value = "order/{orderid}/item/{pizzaid}")
