@@ -33,7 +33,7 @@ public class OrderRestController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
-        Order order = orderService.getAllOrders().get(id);
+        Order order = orderService.getOrder(id);
 
         if (order == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -48,7 +48,7 @@ public class OrderRestController {
             return null;
         }
 
-        Order order = orderService.getAllOrders().get(id);
+        Order order = orderService.getOrder(id);
 
         return order.getPizzas();
     }
@@ -59,7 +59,7 @@ public class OrderRestController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
-        Order order = orderService.getAllOrders().get(orderid);
+        Order order = orderService.getOrder(orderid);
 
         if (order == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -86,7 +86,7 @@ public class OrderRestController {
         Order order = orderService.createNewOrder(orderDto.getCustomer(), 
                 orderDto.getPizzasID());
         order.setDate(new Date());
-        order.setId(orderService.getAllOrders().size());
+        order.setId(orderService.getNumberOfOrders());
         order.setName(orderDto.getCustomer()+ orderDto.getPizzasID().toString());
         System.out.println(order);
         orderService.placeOrder(order);
@@ -102,7 +102,7 @@ public class OrderRestController {
 
         orderService.addItemToOrder(orderid, pizzaid);
 
-        Order order = orderService.getAllOrders().get(orderid);
+        Order order = orderService.getOrder(orderid);
         
 
         return new ResponseEntity<>(order, HttpStatus.OK);
@@ -115,7 +115,7 @@ public class OrderRestController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
-        Order order = orderService.getAllOrders().get(orderid);
+        Order order = orderService.getOrder(orderid);
         
 
         if (order == null) {

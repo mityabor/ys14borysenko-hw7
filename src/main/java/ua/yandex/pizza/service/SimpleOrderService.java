@@ -28,6 +28,16 @@ public abstract class SimpleOrderService implements OrderService {
     }
 
     @Override
+    public int getNumberOfOrders() {
+        return orderRepository.getAllOrders().size();
+    }
+    
+    @Override
+    public Order getOrder(int orderID) {
+        return orderRepository.getAllOrders().get(orderID);
+    }
+    
+    @Override
     public abstract Order createNewOrder();
     
     @Override
@@ -67,5 +77,7 @@ public abstract class SimpleOrderService implements OrderService {
         order.setPrice(order.getPrice()-pizza.getPrice());
     
     }
+    
+    
 
 }

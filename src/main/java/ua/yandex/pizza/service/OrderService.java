@@ -8,6 +8,7 @@ import ua.yandex.pizza.domain.Customer;
 public interface OrderService {
     List<Order> getAllOrders();
 
+    Order getOrder(int orderID);
     Order createNewOrder();
     
     Order createNewOrder(Customer customer, List<Integer> pizzasID);
